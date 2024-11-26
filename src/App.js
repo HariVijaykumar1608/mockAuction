@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import TeamDetailTab from "./teamDetailTab"
 const data = require("./player.json");
-// const background = require("../src/img/background.jpg")
 
 function App() {
   const [currentSetIndex, setCurrentSetIndex] = useState(0);
@@ -75,22 +74,20 @@ function App() {
       const updatedData = data.map((obj) => {
         if (obj.name === buyingTeam) {
           return {
-            ...obj, // Copy all properties of the original object
-            purse: finalPurseValue, // Update purse value
+            ...obj,
+            purse: finalPurseValue,
             players: [
-              ...(obj.players || []), // Keep existing players or use an empty array if no players yet
+              ...(obj.players || []),
               {
-                name: `${currentPlayer.firstName} ${currentPlayer.surName}`, // Add the new player's name
-                isIndian: currentPlayer.Country === "India" ? true : false, // Determine if the player is Indian
+                name: `${currentPlayer.firstName} ${currentPlayer.surName}`, 
+                isIndian: currentPlayer.Country === "India" ? true : false,
               },
             ],
           };
         }
-        return obj; // Return the object unchanged if it doesn't match the team
+        return obj;
       });
-      
-      console.log(updatedData); // Log the updated data to see the result
-      setTeamData(updatedData); // Set the updated data to the state
+      setTeamData(updatedData);
       
       return{done:true,message:`Player Sold for ${buyingTeam} for ${basePrice}L`}
     }
