@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.js": "/mockAuction/static/js/main.4213bf75.js",
+    "static/media/rcb.png": "/mockAuction/static/media/rcb.5dcbe96438f32d4934f1.png",
+    "static/media/mi.png": "/mockAuction/static/media/mi.3fab4396b84d694779ad.png",
+    "static/media/kkr.png": "/mockAuction/static/media/kkr.12f69718447ee2383d96.png",
+    "static/media/srh.png": "/mockAuction/static/media/srh.c94e55d4a7a9c307d1f7.png",
+    "static/media/csk.png": "/mockAuction/static/media/csk.6511f814aee5550c19c0.png",
+    "static/media/gt.png": "/mockAuction/static/media/gt.aff6f6ad3007d228c8b4.png",
+    "index.html": "/mockAuction/index.html",
+    "main.4213bf75.js.map": "/mockAuction/static/js/main.4213bf75.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.4213bf75.js"
+  ]
+}
