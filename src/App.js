@@ -24,11 +24,11 @@ function App() {
     setGroupedData(grouped);
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const currentSet = groupedData[currentSetIndex];
     const currentPlayer = currentSet ? currentSet.players[currentIndex] : null;
     setbasePrice(currentPlayer?.basePrice)
-  },[groupedData,currentIndex])
+  }, [groupedData, currentIndex])
 
   // Shuffle players within each set using Fisher-Yates algorithm
   const shuffle = (array) => {
@@ -40,16 +40,16 @@ function App() {
   };
 
   const teams = [
-    { name : "Chennai Super Kings", purse:5500, players:[]},
-    { name : "Mumbai Indians", purse:4500, players:[]},
-    { name : "Royal Challengers Bangalore", purse:8300, players:[]},
-    { name : "Kolkata Knight Riders", purse:5100, players:[]},
-    { name : "Sunrisers Hyderabad", purse:4500, players:[]},
-    { name : "Gujarat Titans", purse:6900, players:[]},
-    { name : "Rajasthan Royals", purse:4100, players:[]},
-    { name : "Punjab Kings", purse:11050, players:[]},
-    { name : "Lucknow Super Gaints", purse:6900, players:[]},
-    { name : "Delhi Capitals", purse:7300, players:[]},
+    { name: "Chennai Super Kings", purse: 4340, players: [], count: 16, foreign: 4 },
+    { name: "Mumbai Indians", purse: 275, players: [], count: 20, foreign: 7 },
+    { name: "Royal Challengers Bangalore", purse: 1640, players: [], count: 17, foreign: 6 },
+    { name: "Kolkata Knight Riders", purse: 6430, players: [], count: 12, foreign: 2},
+    { name: "Sunrisers Hyderabad", purse: 2550, players: [], count: 15, foreign: 6 },
+    { name: "Gujarat Titans", purse: 1290, players: [], count: 20, foreign: 4 },
+    { name: "Rajasthan Royals", purse: 1605, players: [], count: 16, foreign: 7 },
+    { name: "Punjab Kings", purse: 1150, players: [], count: 21, foreign: 6 },
+    { name: "Lucknow Super Gaints", purse: 2295, players: [], count: 19, foreign: 4 },
+    { name: "Delhi Capitals", purse: 2180, players: [], count: 17, foreign: 3 },
   ];
 
   const [teamData, setTeamData] = useState(teams)
@@ -58,18 +58,24 @@ function App() {
     const data = [...teamData]
     const finalBiddedTeamObj = data[highlightedIndex]
     const buyingTeam = finalBiddedTeamObj?.name || ""
-    if(!buyingTeam){
-      return{done:false,message:`Please Select A Team`}
+    if (!buyingTeam) {
+      return { done: false, message: `Please Select A Team` }
+    }
+    if(finalBiddedTeamObj.count === 25){
+      return { done: false, message: `${buyingTeam} Squad is full` }
     }
     const isIndian = currentPlayer.Country === "India"
-    if(!isIndian){
-      const nonIndianCount = finalBiddedTeamObj.players.filter(player => player.isIndian === false).length
-      if(nonIndianCount > 8){
+    if (!isIndian) {
+      const nonIndianCount = finalBiddedTeamObj.players.foreign === 8
+      if (nonIndianCount) {
         setbasePrice(currentPlayer.basePrice)
-        return{done: false, message: `Foreign Players execeeds for ${buyingTeam}`}
+        return { done: false, message: `Foreign Players execeeds for ${buyingTeam}` }
+      }
+      else{
+        finalBiddedTeamObj.players.foreign = finalBiddedTeamObj.players.foreign + 1
       }
     }
-    if(finalBiddedTeamObj.purse >= basePrice && finalBiddedTeamObj?.players?.length < 25) {
+    if (finalBiddedTeamObj.purse >= basePrice && finalBiddedTeamObj?.players?.length < 25) {
       const finalPurseValue = finalBiddedTeamObj.purse - basePrice
       const updatedData = data.map((obj) => {
         if (obj.name === buyingTeam) {
@@ -79,27 +85,30 @@ function App() {
             players: [
               ...(obj.players || []),
               {
-                name: `${currentPlayer.firstName} ${currentPlayer.surName}`, 
+                name: `${currentPlayer.firstName} ${currentPlayer.surName}`,
                 isIndian: currentPlayer.Country === "India" ? true : false,
+                price: currentPlayer.basePrice
               },
             ],
+            count : obj.count+1,
+            foreign : !isIndian ? obj.foreign+1 : obj.foreign
           };
         }
         return obj;
       });
       setTeamData(updatedData);
-      
-      return{done:true,message:`Player Sold for ${buyingTeam} for ${basePrice}L`}
+
+      return { done: true, message: `Player Sold for ${buyingTeam} for ${basePrice}L` }
     }
-    else{
+    else {
       setbasePrice(currentPlayer.basePrice)
-      return{done:false,message: finalBiddedTeamObj.purse <= basePrice ? `Money Exceeded for ${buyingTeam}` : `Sorry Player exceeded for ${buyingTeam}!!`}
+      return { done: false, message: finalBiddedTeamObj.purse <= basePrice ? `Money Exceeded for ${buyingTeam}` : `Sorry Player exceeded for ${buyingTeam}!!` }
     }
   }
 
   const handleSold = () => {
     const isSold = handleAccounting()
-    if(isSold.done){
+    if (isSold.done) {
       if (currentIndex < groupedData[currentSetIndex].players.length - 1) {
         setCurrentIndex(currentIndex + 1);
         alert(isSold.message)
@@ -115,7 +124,7 @@ function App() {
       }
       setHighlightedIndex(null)
     }
-    else{
+    else {
       alert(isSold.message)
     }
   };
@@ -145,14 +154,14 @@ function App() {
 
   const increment = (amt) => {
     if (amt >= 500) {
-        amt += 25;
+      amt += 25;
     } else if (amt >= 100) {
-        amt += 20;
+      amt += 20;
     } else {
-        amt += 5;
+      amt += 5;
     }
-  setbasePrice(amt)
-};
+    setbasePrice(amt)
+  };
 
   const currentSet = groupedData[currentSetIndex];
   const currentPlayer = currentSet ? currentSet.players[currentIndex] : null;
@@ -165,9 +174,9 @@ function App() {
     width: "100%",               // Ensures full viewport width
     boxSizing: "border-box",     // Includes padding and borders in size calculations
   };
-  
-  
-  
+
+
+
   const boxStyle = {
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     border: "1px solid #ddd",
@@ -244,22 +253,32 @@ function App() {
 
   return (
     <div style={containerStyle}>
-      <Button onClick={toggleDrawer(true)}>
+      <Button
+        onClick={toggleDrawer(true)}
+        sx={{
+          backgroundColor: "black",
+          color: "white",
+          '&:hover': {
+            backgroundColor: "#333", // dark grey on hover
+          }
+        }}
+      >
         <MenuIcon />
-    </Button>
-    {
-      drawerOpen && <TeamDetailTab drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} teams={teamData}/>
-    }
-      <AuctionPurse highlightedIndex={highlightedIndex} setHighlightedIndex={setHighlightedIndex}/>
+      </Button>
+
+      {
+        drawerOpen && <TeamDetailTab drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} teams={teamData} />
+      }
+      <AuctionPurse highlightedIndex={highlightedIndex} setHighlightedIndex={setHighlightedIndex} />
       {currentPlayer ? (
         <div style={boxStyle}>
-          <p style={titleStyle}>IPL Mock Auction</p>
+          <p style={titleStyle}>HariCricYt Mock Auction</p>
           <p style={titleStyle}>
             <strong>Set Name:</strong> {`${currentPlayer.Set}`}
           </p>
-          <p style={detailStyle}>
+          {/* <p style={detailStyle}>
             <strong>Player No:</strong> {`${currentPlayer.playerNo}`}
-          </p>
+          </p> */}
           <p style={detailStyle}>
             <strong>Player Name:</strong> {`${currentPlayer.firstName} ${currentPlayer.surName}`}
           </p>
@@ -287,7 +306,7 @@ function App() {
               style={inputStyle}
               onChange={(e) => setbasePrice(e.target.value && parseInt(e.target.value))}
             />
-            <button style={incrementButtonStyle} onClick={()=>increment(basePrice)}>
+            <button style={incrementButtonStyle} onClick={() => increment(basePrice)}>
               Bid
             </button>
           </div>

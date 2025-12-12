@@ -14,7 +14,7 @@ export default function TeamDetailTab(props) {
         width: '100%',
         height: '70vh',
         padding: 2,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#010101ff',
         overflowY: 'auto',
       }}
     >
@@ -63,7 +63,7 @@ export default function TeamDetailTab(props) {
                   team.players.map((player, idx) => (
                     <div key={`${team.name}-player-${idx}`}>
                       {/* Ensure you render the player's name or a property */}
-                      {player.name || 'No Name'}
+                      {player.name || 'No Name'} - {player.price}
                     </div>
                   ))
                 ) : (
