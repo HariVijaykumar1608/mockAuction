@@ -87,7 +87,7 @@ function App() {
               {
                 name: `${currentPlayer.firstName} ${currentPlayer.surName}`,
                 isIndian: currentPlayer.Country === "India" ? true : false,
-                price: currentPlayer.basePrice
+                price: basePrice
               },
             ],
             count : obj.count+1,
